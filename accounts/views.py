@@ -22,6 +22,7 @@ from statistic.serializer import UserStatisticsSerializer
 
 @api_view(['GET', 'POST'])
 def profile(request: Request):
+    """взаоимоддействие с профилем пользователя"""
     if request.method == 'POST':
         user_id = request.data.get('id')
         print('POST')
@@ -46,6 +47,7 @@ def profile(request: Request):
 
 @api_view(['POST'])
 def follow(request: Request):
+    """Оформление подпискаи"""
     to_follow_id = request.data.get('id')
     access_token = request.headers.get('Access-Token')
 
@@ -62,8 +64,8 @@ def follow(request: Request):
 @api_view(['POST'])
 @permission_classes([AllowAny, ])
 def register(request: Request):
+    """Регистрация пользовтеля"""
     user = request.data.get('user')
-    response = Response()
     serializer = UserSerializer(data=user)
     if serializer.is_valid():
         saved_user: User = serializer.save()
@@ -75,6 +77,7 @@ def register(request: Request):
 @api_view(['POST'])
 @permission_classes([AllowAny, ])
 def authenticate_user(request: Request):
+    """Метод для аутентификация пользователя"""
     try:
         login = request.data.get('login')
         password = request.data.get('password')
@@ -89,5 +92,3 @@ def authenticate_user(request: Request):
     except KeyError:
         res = {'error': 'please provide a email and a password'}
         return Response(res)
-
-
